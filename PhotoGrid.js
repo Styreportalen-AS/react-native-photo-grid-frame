@@ -27,7 +27,19 @@ class PhotoGrid extends Component {
 
     renderChunk() {
         let chunk = _.chunk(this.props.PhotosList, 9);
+        if(this.props.smallMode) {
+            let chunk = _.chunk(this.props.PhotosList, 3);
+            for(const chunkItem of chunk) {
+                let row = _.chunk(chunkItem, 3);
+                return row.map(
+                    (rowItem, rowIndex) => {
 
+                        return this.renderPhotoRow(rowItem, rowIndex, 1 * 9 + rowIndex * 3);
+                    }
+                )
+            }
+
+        }
         return chunk.map(
             (chunkItem, index) => {
                 let row = _.chunk(chunkItem, 3);
@@ -199,7 +211,7 @@ class PhotoGrid extends Component {
 
                     </Modal>
                 </View>
-                
+
             </View>
 
 
@@ -265,11 +277,13 @@ PhotoGrid.propTypes = {
     children: PropTypes.func,
     imageProps: PropTypes.object,
     onPressItem: PropTypes.func,
-    ImageComponent: PropTypes.elementType
+    ImageComponent: PropTypes.elementType,
+    previewMode: PropTypes.booleanValue
 };
 
 PhotoGrid.defaultProps = {
-    ImageComponent: Image
+    ImageComponent: Image,
+    previewMode: false
 };
 
 export { PhotoGrid };
