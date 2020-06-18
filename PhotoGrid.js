@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { View, Image, Dimensions, Modal, TouchableOpacity } from 'react-native';
+import { View, Image, Dimensions, Modal, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import * as _ from 'lodash';
 
 class PhotoGrid extends Component {
@@ -27,14 +27,14 @@ class PhotoGrid extends Component {
 
     renderChunk() {
         let chunk = _.chunk(this.props.PhotosList, 9);
-        if(this.props.smallMode) {
+        if(this.props.previewMode) {
             let chunk = _.chunk(this.props.PhotosList, 3);
             for(const chunkItem of chunk) {
                 let row = _.chunk(chunkItem, 3);
                 return row.map(
                     (rowItem, rowIndex) => {
 
-                        return this.renderPhotoRow(rowItem, rowIndex, 1 * 9 + rowIndex * 3);
+                        return this.renderPhotoRow(rowItem, rowIndex, 0 * 9 + rowIndex * 3);
                     }
                 )
             }
@@ -59,23 +59,48 @@ class PhotoGrid extends Component {
 
     renderItem(item, index, expanded) {
         const { children, imageProps, ImageComponent } = this.props;
-        return (
-            <View ref={`_${index}`} key={index} style={[expanded ? styles.expandedView : styles.photoView, { borderRadius: this.props.borderRadius }]}>
-                <TouchableOpacity onPress={() => { this.photoPopupToggle(item, index) }}>
-                    <ImageComponent
-                        source={{ uri: item.url }}
-                        {...imageProps}
-                        style={[
-                            imageProps && imageProps.style,
-                            styles.ImageStyle,
-                            ...(expanded ? [styles.expandedImage] : []),
-                            { borderRadius: this.props.borderRadius }
-                        ]}
-                    />
-                    {children && children(item)}
-                </TouchableOpacity>
-            </View>
-        );
+        if(this.props.previewMode && index === 2){
+            return (
+                <View ref={`_${index}`} key={index} style={[expanded ? styles.expandedView : styles.photoView, { borderRadius: this.props.borderRadius }]}>
+                    <TouchableOpacity onPress={() => { this.photoPopupToggle(item, index) }}>
+                        <ImageComponent
+                            source={{ uri: item.url }}
+                            {...imageProps}
+                            style={[
+                                imageProps && imageProps.style,
+                                styles.ImageStyle,
+                                ...(expanded ? [styles.expandedImage] : []),
+                                { borderRadius: this.props.borderRadius }
+                            ]}
+                        />
+                        {children && children(item)}
+                    </TouchableOpacity>
+                    <View style={[styles.overlay,  {borderRadius: this.props.borderRadius}]} >
+                        <View style={{ alignSelf: 'stretch', alignContent: 'center', justifyContent:'center', height: '100%'}}>
+                            <Text allowFontScaling={true} adjustsFontSizeToFit={true} style={[{color: 'white', alignSelf: 'center', fontSize: 50}]}>+ {this.props.PhotosList.length - 3}</Text>
+                        </View>
+                    </View>
+                </View>
+            );
+        } else {
+            return (
+                <View ref={`_${index}`} key={index} style={[expanded ? styles.expandedView : styles.photoView, { borderRadius: this.props.borderRadius }]}>
+                    <TouchableOpacity onPress={() => { this.photoPopupToggle(item, index) }}>
+                        <ImageComponent
+                            source={{ uri: item.url }}
+                            {...imageProps}
+                            style={[
+                                imageProps && imageProps.style,
+                                styles.ImageStyle,
+                                ...(expanded ? [styles.expandedImage] : []),
+                                { borderRadius: this.props.borderRadius }
+                            ]}
+                        />
+                        {children && children(item)}
+                    </TouchableOpacity>
+                </View>
+            );
+        }
     }
 
     renderPhotoRow(rowItem, rowIndex, index) {
@@ -226,7 +251,6 @@ const styles = {
 
     container: {
         flex: 1,
-        paddingTop: 20,
         alignItems: 'center',
         justifyContent: 'center'
     },
@@ -268,7 +292,10 @@ const styles = {
     expandedImage: {
         height: 249,
     },
-
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0,0,0,0.5)'
+    }
 }
 
 PhotoGrid.propTypes = {
