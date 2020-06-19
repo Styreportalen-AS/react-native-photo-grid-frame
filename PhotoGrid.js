@@ -305,7 +305,7 @@ PhotoGrid.propTypes = {
     imageProps: PropTypes.object,
     onPressItem: PropTypes.func,
     ImageComponent: PropTypes.elementType,
-    previewMode: PropTypes.booleanValue
+    previewMode: PropTypes.bool
 };
 
 PhotoGrid.defaultProps = {
