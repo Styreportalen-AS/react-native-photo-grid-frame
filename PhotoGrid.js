@@ -82,23 +82,39 @@ class PhotoGrid extends Component {
                     </View>
                 </View>
             );
+        } else if (this.props.previewMode) {
+            return (
+                <View ref={`_${index}`} key={index} style={[expanded ? styles.expandedView : styles.photoView, { borderRadius: this.props.borderRadius }]}>
+                    <ImageComponent
+                        source={{ uri: item.url }}
+                        {...imageProps}
+                        style={[
+                            imageProps && imageProps.style,
+                            styles.ImageStyle,
+                            ...(expanded ? [styles.expandedImage] : []),
+                            { borderRadius: this.props.borderRadius }
+                        ]}
+                    />
+                    {children && children(item)}
+                </View>
+            );
         } else {
             return (
                 <View ref={`_${index}`} key={index} style={[expanded ? styles.expandedView : styles.photoView, { borderRadius: this.props.borderRadius }]}>
-                    <TouchableOpacity onPress={() => { this.photoPopupToggle(item, index) }}>
-                        <ImageComponent
-                            source={{ uri: item.url }}
-                            {...imageProps}
-                            style={[
-                                imageProps && imageProps.style,
-                                styles.ImageStyle,
-                                ...(expanded ? [styles.expandedImage] : []),
-                                { borderRadius: this.props.borderRadius }
-                            ]}
-                        />
-                        {children && children(item)}
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity onPress={() => { this.photoPopupToggle(item, index) }}>
+                    <ImageComponent
+                        source={{ uri: item.url }}
+                        {...imageProps}
+                        style={[
+                            imageProps && imageProps.style,
+                            styles.ImageStyle,
+                            ...(expanded ? [styles.expandedImage] : []),
+                            { borderRadius: this.props.borderRadius }
+                        ]}
+                    />
+                    {children && children(item)}
+                </TouchableOpacity>
+            </View>
             );
         }
     }
