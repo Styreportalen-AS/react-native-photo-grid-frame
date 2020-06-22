@@ -11,7 +11,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+ssh://git@github.com/sivarajng/react-native-photo-grid-frame.git"
+        "url": "git+ssh://git@github.com:Styreportalen-AS/react-native-photo-grid-frame.git"
     },
     "keywords": [
         "react-native",
