@@ -59,7 +59,7 @@ class PhotoGrid extends Component {
 
     renderItem(item, index, expanded) {
         const { children, imageProps, ImageComponent } = this.props;
-        if(this.props.previewMode && index === 2){
+        if(this.props.previewMode && index === 2 && this.props.PhotosList.length > 3){
             return (
                 <View ref={`_${index}`} key={index} style={[expanded ? styles.expandedView : styles.photoView, { borderRadius: this.props.borderRadius }]}>
                     <TouchableOpacity onPress={() => { this.photoPopupToggle(item, index) }}>
